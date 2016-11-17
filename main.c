@@ -6,27 +6,14 @@
 /*   By: vbaron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 16:50:50 by vbaron            #+#    #+#             */
-/*   Updated: 2016/11/15 08:19:01 by vbaron           ###   ########.fr       */
+/*   Updated: 2016/11/17 04:26:01 by vbaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include <fcntl.h>
-/*
-int				press_t(int keycode, t_point p)
-{
-	ft_putstr("Appuie sur l !\n");
-	if (keycode == 37)
-	{
-		p.x++;
-		mlx_pixel_put(p.mlx, p.win, p.x, p.y, 0x00FFFFFF);
-	}
-	return (0);
-}*/
 
-//int				*get_size_map()
-/*
-int				get_dim(int fd, int *xlen, int *zwid)
+/*int				get_dim(int fd, int *xlen, int *zwid)
 {
 	int			gnl_ret;
 	char		**str;
@@ -84,7 +71,7 @@ t_point			*fill_p(int fd)
 		if (x == -1)
 			return (NULL);
 		x = 0;
-		str = ft_strsplit(line, ' ');//ft_free str et line ?
+		str = ft_strsplit_mo(line, ' ', '	', ' ');//ft_free str et line ?
 		while (str[x] != NULL)
 		{
 			p = ft_lstadd_p(p, x, str[x], z);
@@ -113,46 +100,12 @@ t_point				ortho_to_iso(t_point ort_p, t_env env)
 	t_point			iso_p;
 
 	iso_p = ort_p;
+	iso_p.z = ort_p.y;
 	iso_p.x = (ort_p.x - ort_p.z) * (env.scale / 2);
 	iso_p.y = (ort_p.x + ort_p.z - (ort_p.y)) * (env.scale / 2);
 	iso_p.x += WIN_LEN / 2;
 	iso_p.y += WIN_HEIGHT / 10;
 	return (iso_p);
-}
-
-int				key_hook(int code, t_env *env)
-{
-	ft_putnbr(code);
-	ft_putchar('\n');
-	if (code == 53)
-	{
-		mlx_destroy_window(env->mlx, env->win);
-		exit(0);
-	}
-	if (code == 0)
-		env->rl -= 1 * SPEED;
-	if (code == 2)
-		env->rl += 1 * SPEED;
-	if (code == 1)
-		env->bf += 1 * SPEED;
-	if (code == 13)
-		env->bf -= 1 * SPEED;
-	if (code == 49)
-		env->ud += 1 * SPEED;
-	if (code == 257)
-		env->ud -= 1 * SPEED;
-	if (code == 69)
-		env->scale += 1 * SCALE_POWER;
-	if (code == 78)
-		env->scale -= 1 * SCALE_POWER;
-//	matricialisation(env); Dans le prochaine episode !
-	return (0);
-}//colorier soi meme la map :) avec le curseur et les touches
-
-int				redim(t_env *env)
-{
-//changement de dimension de la fenettre ?
-	return (0);
 }
 
 int				main(int argc, char **argv)
@@ -178,6 +131,8 @@ int				main(int argc, char **argv)
 		return (-1);
 	if (!(env->win = mlx_new_window(env->mlx, WIN_LEN, WIN_HEIGHT, "title")))
 		return (-1);
+	if (!(env->img = new_img(env)))
+		return (-1);
 	tmp = p;
 	while (tmp != NULL)
 	{
@@ -190,6 +145,12 @@ int				main(int argc, char **argv)
 		tmp = tmp->next;
 	}
 	env->scale = WIN_LEN / (env->xmax + env->zmax / 2);
+/*	env->scale = 0;
+	while (WIN_HEIGHT / 2 > map->h * env->scale
+				&& WIN_LEN / 2 > map->l * env->scale
+				&& env->scale < SCALE_MAX)
+		env->scale += 1;*/
+
 //valeurs modifiable et sans precision necessaire (ajustement final)
 	tmp = p;
 	while (tmp != NULL)
@@ -212,9 +173,10 @@ int				main(int argc, char **argv)
 //		prevz = tmp->z;
 //	ft_lstmap(p, (*modif_p));
 //	verifier avant de poser un pixel si il est dans l'ecran et gerer les deplacement en decalant tout les points (utiliser fleches) pour le zoom utiliser TILE_...
-//
-	mlx_expose_hook(env->win, redim, env);
-	mlx_key_hook(env->win, key_hook, env);
+	env->p = p;
+	ft_putstr("hook entrance :\n");
+	mlx_key_hook(env->win, event, env);
+	mlx_expose_hook(env->win, print_img, env);
 	mlx_loop(env->mlx);
 	return (0);
 }

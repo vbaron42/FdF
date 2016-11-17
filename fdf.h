@@ -6,7 +6,7 @@
 /*   By: vbaron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/01 22:43:45 by vbaron            #+#    #+#             */
-/*   Updated: 2016/11/15 06:14:00 by vbaron           ###   ########.fr       */
+/*   Updated: 2016/11/17 03:16:30 by vbaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 # define TILE_WIDTH 60
 # define TILE_HEIGHT 40
 # define P_HEIGHT 1
-# define WIN_LEN 600
-# define WIN_HEIGHT 650
+# define WIN_LEN 700
+# define WIN_HEIGHT 750
 # define SPEED 30
 # define SCALE_POWER 30
 
@@ -33,13 +33,22 @@ typedef struct		s_point
 
 typedef struct	s_line_data
 {
-	int			dx;
-	int			dy;
-	int			ix;
-	int			iy;
-	int			err;
-	int			e;
-}				t_line_data;
+	int				dx;
+	int				dy;
+	int				ix;
+	int				iy;
+	int				err;
+	int				e;
+}					t_line_data;
+
+typedef struct		s_img
+{
+	void			*ptr;
+	int				bpp;
+	int				line_size;
+	int				endian;
+	char			*pxl_byt;
+}					t_img;
 
 typedef struct		s_env
 {
@@ -52,10 +61,14 @@ typedef struct		s_env
 	int				zmax;//		pour trouver scale
 	void			*mlx;
 	void			*win;
-//	t_point			*p;
+	t_img			*img;	
+	t_point			*p;
 	int				error;
 }					t_env;
 
+int					event(int keycode, t_env *env);
+t_img				*new_img(t_env *env);
+int					print_img(t_env *env);
 t_point				*get_map(char *file);
 t_point				ortho_to_iso(t_point p, t_env env);
 int					draw_map(t_point *p, t_env *env);

@@ -6,7 +6,7 @@
 /*   By: vbaron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 03:12:00 by vbaron            #+#    #+#             */
-/*   Updated: 2016/11/13 08:02:08 by vbaron           ###   ########.fr       */
+/*   Updated: 2016/11/16 23:55:50 by vbaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,11 @@ t_point			*matrice(t_point *p, t_move m)
 	pnew->next;
 	return (pnew);
 }
-
+/*
 	while (i < 4)
 	{
 		f[i][i] = m->scale;
 	}
 	f[0][3] = m->xpos;
 	f[1][3] = m->ypos;
-
+	*/

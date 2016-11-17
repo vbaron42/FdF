@@ -6,11 +6,26 @@
 /*   By: vbaron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/11 19:10:30 by vbaron            #+#    #+#             */
-/*   Updated: 2016/11/15 08:09:29 by vbaron           ###   ########.fr       */
+/*   Updated: 2016/11/17 04:11:00 by vbaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+
+void		img_put_pixel(t_env *e, t_point *p, int c)
+{
+	int		pxl;
+
+	pxl = (p->y) * e->img->line_size
+		+ (e->img->bpp/8) * (p->x);
+	if (p->y < WIN_HEIGHT && p->x < WIN_LEN
+			&& p->y > 0 && p->x > 0)
+	{
+		e->img->pxl_byt[pxl] = c;
+		e->img->pxl_byt[++pxl] = c >> 8;
+		e->img->pxl_byt[++pxl] = c >> 16;
+	}
+}
 
 t_line_data			*new_ldata(t_point a, t_point b)
 {
@@ -34,12 +49,11 @@ int					segment_put(t_env *env, t_point a, t_point b)
 			return (-1);
 	while (42)
 	{
-		mlx_pixel_put(env->mlx, env->win, a.x, a.y, a.c);//temporaire
-//		if (b.c < a.c)
-//			img_put_pixel(env, &a, b.c);
-//		else
-//			img_put_pixel(env, &a, a.c);
-		if (a.x == b.x && a.y == b.y)//voir en quoi consiste les a.color et b.color
+		if (b.z > a.z)
+			img_put_pixel(env, &a, b.c);
+		else
+			img_put_pixel(env, &a, a.c);
+		if (a.x == b.x && a.y == b.y)
 			break ;
 		l->e = l->err;
 		if (l->e > -l->dx)
