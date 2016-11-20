@@ -6,7 +6,7 @@
 /*   By: vbaron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/01 22:43:45 by vbaron            #+#    #+#             */
-/*   Updated: 2016/11/17 03:16:30 by vbaron           ###   ########.fr       */
+/*   Updated: 2016/11/19 18:58:29 by vbaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # define WIN_LEN 700
 # define WIN_HEIGHT 750
 # define SPEED 30
-# define SCALE_POWER 30
+# define SCALE_POWER 1
 
 typedef struct		s_point
 {
@@ -31,7 +31,7 @@ typedef struct		s_point
 	void			*next;
 }					t_point;
 
-typedef struct	s_line_data
+typedef struct		s_line_data
 {
 	int				dx;
 	int				dy;
@@ -56,12 +56,12 @@ typedef struct		s_env
 	int				bf;
 	int				ud;
 	int				scale;
-	int				xmax;//		a enlever du .h et a integrer
-	int				ymax;//		dans une fonction
-	int				zmax;//		pour trouver scale
+	int				xmax;
+	int				ymax;
+	int				zmax;
 	void			*mlx;
 	void			*win;
-	t_img			*img;	
+	t_img			*img;
 	t_point			*p;
 	int				error;
 }					t_env;
@@ -71,5 +71,5 @@ t_img				*new_img(t_env *env);
 int					print_img(t_env *env);
 t_point				*get_map(char *file);
 t_point				ortho_to_iso(t_point p, t_env env);
-int					draw_map(t_point *p, t_env *env);
+void				draw_map(t_point *p, t_env *env);
 #endif

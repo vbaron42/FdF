@@ -6,7 +6,7 @@
 /*   By: vbaron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/16 22:36:55 by vbaron            #+#    #+#             */
-/*   Updated: 2016/11/17 01:28:26 by vbaron           ###   ########.fr       */
+/*   Updated: 2016/11/19 18:54:32 by vbaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,14 @@ t_img		*new_img(t_env *env)
 	return (img);
 }
 
-int		print_img(t_env *env)
-{;
+int			print_img(t_env *env)
+{
 	mlx_destroy_image(env->mlx, env->img->ptr);
 	if (!(env->img = new_img(env)))
 		exit(1);
-	draw_map(env->p, env);// p sera matrice(p, move)
+	draw_map(env->p, env);
 	mlx_clear_window(env->mlx, env->win);
 	mlx_put_image_to_window(env->mlx, env->win, env->img->ptr, 0, 0);
-//	display_info(env); (affichage supplementaire)
 	ft_putstr("img print !");
 	return (1);
 }

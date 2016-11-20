@@ -6,18 +6,17 @@
 /*   By: vbaron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/11 19:10:30 by vbaron            #+#    #+#             */
-/*   Updated: 2016/11/17 04:11:00 by vbaron           ###   ########.fr       */
+/*   Updated: 2016/11/19 18:53:21 by vbaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void		img_put_pixel(t_env *e, t_point *p, int c)
+void				img_put_pixel(t_env *e, t_point *p, int c)
 {
-	int		pxl;
+	int				pxl;
 
-	pxl = (p->y) * e->img->line_size
-		+ (e->img->bpp/8) * (p->x);
+	pxl = (p->y) * e->img->line_size + (e->img->bpp / 8) * (p->x);
 	if (p->y < WIN_HEIGHT && p->x < WIN_LEN
 			&& p->y > 0 && p->x > 0)
 	{
@@ -41,12 +40,11 @@ t_line_data			*new_ldata(t_point a, t_point b)
 	return (l);
 }
 
-int					segment_put(t_env *env, t_point a, t_point b)
+void				segment_put(t_env *env, t_point a, t_point b)
 {
 	t_line_data		*l;
 
-	if (!(l = new_ldata(a, b)))
-			return (-1);
+	l = new_ldata(a, b);
 	while (42)
 	{
 		if (b.z > a.z)
@@ -67,11 +65,9 @@ int					segment_put(t_env *env, t_point a, t_point b)
 			a.y += l->iy;
 		}
 	}
-	//free ldata
-	return (0);
 }
 
-int					draw_map(t_point *p, t_env *env)
+void				draw_map(t_point *p, t_env *env)
 {
 	t_point			*pnext;
 	t_point			*pdown;
@@ -85,9 +81,9 @@ int					draw_map(t_point *p, t_env *env)
 	while (pnext != NULL)
 	{
 		if (pdown != NULL)
-			env->error = segment_put(env, *p, *pdown);
+			segment_put(env, *p, *pdown);
 		if (i++ < env->xmax)
-			env->error = segment_put(env, *p, *pnext);
+			segment_put(env, *p, *pnext);
 		else
 			i = 0;
 		p = p->next;
@@ -95,5 +91,4 @@ int					draw_map(t_point *p, t_env *env)
 		if (pdown != NULL)
 			pdown = pdown->next;
 	}
-	return (env->error);
 }

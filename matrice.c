@@ -6,11 +6,11 @@
 /*   By: vbaron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 03:12:00 by vbaron            #+#    #+#             */
-/*   Updated: 2016/11/16 23:55:50 by vbaron           ###   ########.fr       */
+/*   Updated: 2016/11/17 04:40:37 by vbaron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-t_point			*matrice(t_point *p, t_move m)
+t_point			*matrice(t_point *p, t_env env)
 {
 	y_point		pnew;
 	int			f[4][4];
@@ -25,10 +25,10 @@ t_point			*matrice(t_point *p, t_move m)
 		{
 			f[i][i2] = 0;//temporaire ?
 			if (i == i2)
-				f[i][i2] = m->scale;
+				f[i][i2] = env->scale;
 			i2++;
 		}
-		f[i][3] = m->pos[i]
+		f[i][3] = env->pos[i]
 		i++;
 	}
 	pnew->x = f[0][0] * p->x + f[0][1] * p->y + f[0][2] * p->z + f[0][3] * p->w;
